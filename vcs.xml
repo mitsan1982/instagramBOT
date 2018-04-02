@@ -6,6 +6,10 @@
           <option name="url" value="https://github.com/mitsan1982/instagramBOT.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="http://github.com" />
+          <option name="userName" value="mitsan1982" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="D:\Files\Dropbox (Personal)\Development\instagram" />
