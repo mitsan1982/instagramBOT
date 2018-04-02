@@ -11,7 +11,7 @@ def get_all_links(driver,hashtag):
     elements = driver.find_elements_by_tag_name('a')
     for elem in elements:
         href = elem.get_attribute("href")
-        if hashtag in href:
+        if "tagged="+hashtag in href:
             links.append(href)
     return links
 
@@ -34,8 +34,11 @@ driver.find_element_by_xpath("//input[@name='password']").send_keys(pwd)
 driver.find_element_by_xpath("//input[@name='password']").send_keys(Keys.RETURN)
 
 # Clear Notification Screen
-time.sleep(5)
-driver.find_element_by_xpath('.//div[@class="_hkmnt _g3lyc"][contains(., "Not Now")]').click()
+try:
+    time.sleep(5)
+    driver.find_element_by_xpath('.//div[@class="_hkmnt _g3lyc"][contains(., "Not Now")]').click()
+except:
+    print("No Notification Dialogue")
 
 # Go to hashtag page and collect links
 #driver.find_element_by_xpath('//input[@placeholder="Search"]').send_keys('#fishing')
@@ -50,20 +53,27 @@ data = {}
 data['like'] = []
 
 for link in links:
-    driver.get(link)
-    time.sleep(5)
-    driver.find_element_by_xpath('.//span[@class="_8scx2 coreSpriteHeartOpen"][contains(., "Like")]').click()
-    account = driver.find_element_by_xpath('.//a[@class="_2g7d5 notranslate _iadoq"]').text
-    if driver.find_element_by_xpath('.//button[@class="_qv64e _iokts _4tgw8 _njrw0"]').text == 'Follow':
-        follow = 'No'
-    else:
-        follow = 'Yes'
-    jsonentry = {'datetime':str(datetime.now()),'account':account,'follow':follow,'link':link}
-    print(jsonentry)
-    data['like'].append(jsonentry)
+    try:
+        driver.get(link)
+        time.sleep(5)
+        driver.find_element_by_xpath('.//span[@class="_8scx2 coreSpriteHeartOpen"][contains(., "Like")]').click()
+        account = driver.find_element_by_xpath('.//a[@class="_2g7d5 notranslate _iadoq"]').text
+        if driver.find_element_by_xpath('.//button[@class="_qv64e _iokts _4tgw8 _njrw0"]').text == 'Follow':
+            follow = 'No'
+        else:
+            follow = 'Yes'
+        jsonentry = {'datetime':str(datetime.now()),'account':account,'follow':follow,'link':link}
+        print(jsonentry)
+        data['like'].append(jsonentry)
+    except:
+        print("Problem with URL - Can't find element - Post already Liked")
 
-with open('data.txt', 'w') as outfile:
-    json.dump(data, outfile)
+try:
+    with open('data.txt', 'a') as outfile:
+        outfile.write("\r\n,")
+        json.dump(data, outfile)
+        outfile.close()
+except:
+    print("Not possible to write to json file")
 
-time.sleep(10)
 driver.close()
