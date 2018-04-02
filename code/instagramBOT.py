@@ -16,8 +16,8 @@ def get_all_links(driver,hashtag):
     return links
 
 # User information
-user = "mitsan.fishing@gmail.com"
-pwd = "Kreator10"
+user = "xxx"
+pwd = "xxx"
 hashtag = "fishing"
 
 # Start Chrome
@@ -46,7 +46,10 @@ time.sleep(2)
 hashtagurl = "https://www.instagram.com/explore/tags/" + hashtag + "/"
 driver.get(hashtagurl)
 time.sleep(2)
-links = get_all_links(driver,hashtag)
+try:
+    links = get_all_links(driver,hashtag)
+except:
+    print("Error acquiring links")
 
 # Open link, like post, log activity
 data = {}
@@ -70,7 +73,7 @@ for link in links:
 
 try:
     with open('data.txt', 'a') as outfile:
-        outfile.write("\r\n,")
+        outfile.write("\r,")
         json.dump(data, outfile)
         outfile.close()
 except:
