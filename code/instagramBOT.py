@@ -16,11 +16,12 @@ def get_all_links(driver,hashtag):
     return links
 
 # User information
-user = "mitsan.flores@gmail.com"
+user = "mitsan.fishing@gmail.com"
 pwd = "Kreator10"
+hashtag = "fishing"
 
 # Start Chrome
-driver = webdriver.Chrome('D:\Files\Dropbox (Personal)\Development\instagram\instagramBOT\code\chromedriver.exe')
+driver = webdriver.Chrome('.\chromedriver.exe')
 
 # Access Website
 driver.get("http://www.instagram.com/accounts/login")
@@ -37,28 +38,29 @@ time.sleep(5)
 driver.find_element_by_xpath('.//div[@class="_hkmnt _g3lyc"][contains(., "Not Now")]').click()
 
 # Go to hashtag page and collect links
-
 #driver.find_element_by_xpath('//input[@placeholder="Search"]').send_keys('#fishing')
 time.sleep(2)
-driver.get("https://www.instagram.com/explore/tags/fishing/")
+hashtagurl = "https://www.instagram.com/explore/tags/" + hashtag + "/"
+driver.get(hashtagurl)
 time.sleep(2)
-links = get_all_links(driver,"fishing")
+links = get_all_links(driver,hashtag)
 
-# Open link and like post
-
+# Open link, like post, log activity
 data = {}
 data['like'] = []
 
 for link in links:
     driver.get(link)
     time.sleep(5)
-    #driver.find_element_by_xpath('.//span[@class="_8scx2 coreSpriteHeartOpen"][contains(., "Like")]').click()
+    driver.find_element_by_xpath('.//span[@class="_8scx2 coreSpriteHeartOpen"][contains(., "Like")]').click()
     account = driver.find_element_by_xpath('.//a[@class="_2g7d5 notranslate _iadoq"]').text
     if driver.find_element_by_xpath('.//button[@class="_qv64e _iokts _4tgw8 _njrw0"]').text == 'Follow':
         follow = 'No'
     else:
         follow = 'Yes'
-    data['like'].append({'datetime':str(datetime.now()),'account':account,'follow':follow,'link':link})
+    jsonentry = {'datetime':str(datetime.now()),'account':account,'follow':follow,'link':link}
+    print(jsonentry)
+    data['like'].append(jsonentry)
 
 with open('data.txt', 'w') as outfile:
     json.dump(data, outfile)
