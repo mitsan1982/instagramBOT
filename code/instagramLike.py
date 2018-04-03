@@ -18,7 +18,7 @@ def get_all_links(driver,hashtag):
 # User information
 user = "xxx"
 pwd = "xxx"
-hashtag = "fishing"
+hashtag = "largemouthbass"
 
 # Start Chrome
 driver = webdriver.Chrome('.\chromedriver.exe')
